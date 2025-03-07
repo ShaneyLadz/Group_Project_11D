@@ -3,7 +3,7 @@ from Quiztopia.models import UserProfile, Quiz, Question, Answer
 
 class UserProfileAdmin(admin.ModelAdmin):
 
-    list_display = ('username', 'points', 'quizzes_taken', 'quizzes_created')
+    list_display = ('user', 'username', 'points', 'quizzes_taken', 'quizzes_created')
 
 class QuizAdmin(admin.ModelAdmin):
 

@@ -3,14 +3,14 @@ from Quiztopia.models import Quiz, Question, Answer
 
 class QuizForm(forms.ModelForm):
 
-    title = forms.CharField(max_length=200, help_text="Quiz Name:")
+    quiz_title = forms.CharField(max_length=200, help_text="Quiz Name:")
     category = forms.ChoiceField(choices=Quiz.categories, help_text="Category:")
     difficulty = forms.ChoiceField(choices=Quiz.difficulties, help_text="Difficulty:")
     upvotes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
 
     class Meta:
         model = Quiz
-        fields = ('title','category','difficulty')
+        fields = ('quiz_title','category','difficulty')
 
 class QuestionForm(forms.ModelForm):
 

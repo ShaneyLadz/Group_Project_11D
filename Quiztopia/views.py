@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm
+from Quiztopia.models import UserProfile
 
 def index(request):
     return render(request, 'Quiztopia/index.html')
@@ -27,7 +28,7 @@ def user_login(request):
             return HttpResponse("Invalid login details supplied.")
         
     else:
-        return render(request, 'Quiztopia/login.html')#
+        return render(request, 'Quiztopia/login.html')
     
 @login_required
 def add_quiz(request):
@@ -37,8 +38,9 @@ def add_quiz(request):
         form = QuizForm(request.POST)
 
         if form.is_valid():
+            creator = UserProfile.objects.get(user=request.user)
             quiz = form.save(commit=False)
-            quiz.creator = request.user
+            quiz.creator = creator
             form.save(commit=True)
             return redirect('/Quiztopia/')
         else:
