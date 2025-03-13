@@ -5,8 +5,20 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm
 
+CATEGORIES = [
+    ("Movies And TV", "Movies And TV"),
+    ("Animals", "Animals"),
+    ("General Knowledge", "General Knowledge"),
+    ("Sports", "Sports"),
+    ("Other", "Other"),
+]
+
 def index(request):
-    return render(request, 'Quiztopia/index.html')
+    return render(request, 'Quiztopia/index.html', {'categories': CATEGORIES})
+
+def category_view(request, category_name):
+    quizzes = Quiz.objects.filter(category=category_name)
+    return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_name})
 
 def user_login(request):
     if request.method == 'POST':
