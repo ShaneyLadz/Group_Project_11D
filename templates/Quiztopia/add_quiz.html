@@ -6,15 +6,105 @@
     <div>
         <form id="quiz_form" method="post" action="{% url 'Quiztopia:add_quiz' %}">
             {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
-            {% endfor %}
-            {% for field in form.visible_fields %}
-                {{ field.errors }}
-                {{ field.help_text }}
-                {{ field }}
-            {% endfor %}
+            {{ form.as_p }}
+            {{ questions.management_form }}
+            <div id="questions">
+                {% for question, answers in questions_and_answers %}
+                    <div id="question-{{forloop.counter }}">
+                        <h3 id="questionHeader">Question {{ forloop.counter }}</h3>
+                        {{ question.as_p }}
+                        <input type="text" name="questions-{{ forloop.counter0 }}-question_text" maxlength="500" pattern=".*\S.*" title="Question must contain atleast one character" placeholder="Enter question text" required>
+                        <h3>Answers:</h3>
+                        {{ answers.management_form }}
+                        {% for answer in answers %}
+                            <div class ="answer">
+                                <input type="text", name="answers-{{ forloop.parentloop.counter0}}-{{ forloop.counter0}}-answer_text" maxlength="200"  pattern=".*\S.*" title="Answer must contain atleast one character" placeholder="Enter answer text" {% if forloop.counter0 < 2 %}required{% endif %}>
+                                <input type="radio" name="correct_answer_question_{{ forloop.parentloop.counter0 }}" value="{{ forloop.counter0 }}" required> Correct?
+                            </div>
+                    {% endfor %}
+                    </div>
+                    {% endfor %}
+            </div>
+            <button type="button" id="addQuestion">Add Question</button>
+            <button type="button" id="deleteQuestion">Delete Question</button>
             <input type="submit" name="submit" value="Create Quiz" />
         </form>
     </div>
+
+<script>
+
+    const questions = document.getElementById("questions")
+    const addQuestion = document.getElementById("addQuestion");
+    const deleteQuestion = document.getElementById("deleteQuestion")
+    var numberOfQuestions = questions.children.length;
+
+    function addRemoveButton(){
+        deleteQuestion.addEventListener("click", function(){
+            if(numberOfQuestions > 1){
+                const form = questions.children[numberOfQuestions-1]
+                
+                if (form && form.style.display!="none") {
+                    form.style.display="none";
+                    const elements = form.querySelectorAll('input, select, button, textarea');
+                    elements.forEach((element) => {
+                        element.disabled = true;
+                    });
+                numberOfQuestions--;
+                updateTotalForms();
+            }
+        }
+        
+    });
+}
+
+
+    addQuestion.addEventListener("click", function(){
+        if(numberOfQuestions < 10){
+        
+            const form = document.getElementById(`question-${numberOfQuestions+1}`);
+    
+            if (form && form.style.display=="none") {
+                numberOfQuestions++;
+                form.style.display="block"
+                const elements = form.querySelectorAll('input, select, button, textarea');
+                elements.forEach((element) => {
+                    element.disabled = false;
+                });
+            }
+            updateTotalForms();
+        }
+    })
+
+
+    function updateTotalForms() {
+        const totalFormsField = document.querySelector('#id_questions-TOTAL_FORMS');
+        totalFormsField.value = numberOfQuestions;
+    }
+
+    document.getElementById('quiz_form').addEventListener('submit', function(event) {
+        let valid = true;
+        var counter = 1
+
+        const questionDivs = Array.from(questions.children)
+        questionDivs.forEach((questionDiv) => {
+            const correctAnswer = questionDiv.querySelector('input[type="radio"]:checked');
+
+            if (correctAnswer) {
+                const correctAnswerInput = correctAnswer.closest('.answer').querySelector('input[type="text"]');
+                
+                if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
+                    alert(`Cannot select a blank answer as correct for question ${counter}. Please select a non blank answer as correct`);
+                    valid = false;
+                }
+            } 
+            counter++
+        });
+
+        if (!valid) {
+            event.preventDefault(); 
+        }
+    });
+
+    addRemoveButton()
+</script>
 {% endblock %}
