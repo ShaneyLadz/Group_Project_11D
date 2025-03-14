@@ -1,5 +1,13 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
-
+{% block content %}
+    <h1>Welcome to Quiztopia!</h1>
+    <h2>Categories</h2>
+    <ul>
+        {% for category in categories %}
+            <li><a href="{% url 'Quiztopia:category' category.0 %}">{{ category.1 }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 
