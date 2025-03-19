@@ -95,10 +95,13 @@ def add_quiz(request):
 def take_quiz(request, category_slug, quiz_id):
     
     if request.method == 'POST':
+        user = UserProfile.objects.get(user = request.user)
+        user.quizzes_taken += 1
+        user.save()
+
         # Radio buttons which user selected for each question
         # Note, you'll want these for quiz_results
         selected_answers = {}
-
         questions = Question.objects.filter(quiz_ID = quiz_id)
 
         i = 1
