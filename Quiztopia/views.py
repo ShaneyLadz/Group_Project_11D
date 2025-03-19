@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet
-from Quiztopia.models import UserProfile, Question
+from Quiztopia.models import UserProfile, Question, Quiz, Answer
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -90,3 +90,46 @@ def add_quiz(request):
 
 
     return render(request, 'Quiztopia/add_quiz.html', {'form' : form, 'questions' : question_formset, 'questions_and_answers' : question_answer_pairs})
+
+
+def take_quiz(request, category_slug, quiz_id):
+    
+    if request.method == 'POST':
+        # Radio buttons which user selected for each question
+        # Note, you'll want these for quiz_results
+        selected_answers = {}
+
+        questions = Question.objects.filter(quiz_ID = quiz_id)
+
+        i = 1
+        while i <= len(questions):
+            selected_answers[f"question_{i}"] = request.POST.get(str(i))
+            i += 1
+
+        return redirect(reverse("Quiztopia:quiz_results",
+                                kwargs = {"category_slug" : category_slug,
+                                          "quiz_id" : quiz_id}))
+
+    else:
+        context_dict = {}
+        try:
+            quiz = Quiz.objects.get(quiz_ID = quiz_id, category_slug = category_slug)
+            questions = Question.objects.filter(quiz_ID = quiz_id)
+        except Quiz.DoesNotExist:   
+            quiz = None
+
+        if quiz is None:
+            return HttpResponse("Quiz Does Not Exist.")
+
+        context_dict["quiz"] = quiz
+        context_dict["questions_answers"] = []
+
+        for question in questions:
+            answers = Answer.objects.filter(question_ID = question.question_ID)
+            context_dict["questions_answers"].append((question, answers))
+
+        return render(request, 'Quiztopia/take_quiz.html', context_dict)
+    
+
+def quiz_results(request, category_slug, quiz_id):
+    return HttpResponse("This view is in progress")

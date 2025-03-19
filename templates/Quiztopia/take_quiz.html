@@ -1,0 +1,33 @@
+{% extends 'Quiztopia/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+    <h1>{{ quiz.quiz_title }}</h1>
+
+    <div>
+        <form id = "answer_form" method="post" action ="{% url 'Quiztopia:take_quiz' quiz.category_slug quiz.quiz_ID %}">
+        {% csrf_token %}
+
+            <h3>Created by {{ quiz.creator }} <br />
+            {{ quiz.category }} - {{ quiz.difficulty }}</h3>
+
+            <div id = "questions">
+                {% for question, answers in questions_answers %}
+                    <h3 id = "questionHeader">Question {{ forloop.counter }}</h3>
+                        <h3 id = "questionText">{{ question.question_text }}</h3>
+
+                        <h3 id = "answerHeader">Answers:</h3>
+                        {% for answer in answers %}
+                            <div class = "answer">
+
+                                <input type = "radio" name = "{{ forloop.parentloop.counter }}" value = "{{ forloop.counter }}" />
+                                {{ answer }}
+                                
+                            </div>
+                        {% endfor %}
+                {% endfor %}
+            </div>
+            <input type = "submit" name = "submit" value = "Complete Quiz" />
+        </form>
+    </div>
+{% endblock %}
