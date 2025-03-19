@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 
 class UserProfile(models.Model):
 
@@ -35,9 +36,14 @@ class Quiz(models.Model):
     difficulty = models.CharField(max_length=100,choices=difficulties)
     upvotes = models.IntegerField(default=0)
     creator = models.ForeignKey(UserProfile, on_delete=models.CASCADE, to_field='username')
+    category_slug = models.SlugField()
 
     class Meta:
         verbose_name_plural = 'Quizzes'
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.category)
+        super(Quiz, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.quiz_title

@@ -8,5 +8,7 @@ urlpatterns = [
     path('login/', views.user_login, name='login'),
     path('add_quiz/', views.add_quiz, name='add_quiz'),
     path('register/', views.register, name='register'),
-    path('category/<category_name>/', views.category_view, name="category")
+    path('category/<category_name>/', views.category_view, name="category"),
+    path('categories/<str:category_slug>/<int:quiz_id>/take_quiz/', views.take_quiz, name = 'take_quiz'),
+    path('categories/<str:category_slug>/<int:quiz_id>/take_quiz/quiz_results/', views.quiz_results, name = "quiz_results")
 ]
