@@ -7,4 +7,6 @@ urlpatterns = [
     path('', views.index, name = "index"),
     path('login/', views.user_login, name='login'),
     path('add_quiz/', views.add_quiz, name='add_quiz'),
+    path('register/', views.register, name='register'),
+    path('category/<category_name>/', views.category_view, name="category")
 ]

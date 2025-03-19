@@ -1,5 +1,5 @@
 from django import forms 
-from Quiztopia.models import Quiz, Question, Answer
+from Quiztopia.models import Quiz, Question, Answer, User, UserProfile
 from django.forms import formset_factory, inlineformset_factory
 
 class QuizForm(forms.ModelForm):
@@ -29,6 +29,18 @@ class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
         fields = ('answer_text','is_correct')
+
+class UserForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password',)
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ('profile_picture',)
 
 QuestionFormSet = formset_factory(QuestionForm, extra=10,min_num=0,max_num=10)
 AnswerFormSet = inlineformset_factory(Question, Answer, form=AnswerForm, extra=4, max_num=4, can_delete=False)

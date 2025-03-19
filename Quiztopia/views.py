@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet
-from Quiztopia.models import UserProfile, Question
+from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserProfileForm, UserForm
+from Quiztopia.models import UserProfile, Question, Quiz
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -20,6 +20,36 @@ def index(request):
 def category_view(request, category_name):
     quizzes = Quiz.objects.filter(category=category_name)
     return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_name})
+
+def register(request):
+    registered = False
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+
+            user.set_password(user.password)
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.username = user.username
+
+            if 'profile_picture' in request.FILES:
+                profile.profile_picture = request.FILES['profile_picture']
+            
+            profile.save()
+            registered = True
+        else:
+            print(user_form.errors, profile_form.errors)
+    else:
+        user_form = UserForm()
+        profile_form = UserProfileForm()
+
+    return render(request, 'Quiztopia/register.html', context={'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 def user_login(request):
     if request.method == 'POST':
