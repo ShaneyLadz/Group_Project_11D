@@ -1,0 +1,45 @@
+{% extends 'Quiztopia/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+    <h1>{{ quiz.quiz_title }}</h1>
+
+    <div>
+        <h3>Created by {{ quiz.creator }} <br />
+        {{ quiz.category }} - {{ quiz.difficulty }}</h3>
+
+        <div id = "results">
+            <p><h2>You got {{ no_correct }} / {{ no_questions }} questions correct! <br />
+            {{ score }} points earned</p>
+
+            Rate this quiz: (insert) </h2>
+        </div>
+
+        <div id = "questions">
+            {% for question, answers, selection in questions_answers_selections %}
+                <h3 id = "questionHeader">Question {{ forloop.counter }}</h3>
+                <h3 id = "questionText">{{ question.question_text }}</h3>
+
+                <h3 id = "answerHeader">Answers:</h3>
+                {% for answer in answers %}
+                    <div class = "answer">
+
+                        <input type="radio" name="{{ forloop.parentloop.counter }}" value="{{ forloop.counter }}"
+                        {% if forloop.counter == selection %} checked {% endif %} disabled />
+
+                        {% if answer.is_correct %}
+                            <b><span style="color:green;">{{ answer }}</span></b>
+                        {% else %}
+                            {{ answer }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <form id = "return_form" method="post" action="{% url 'Quiztopia:quiz_results' quiz.category_slug quiz.quiz_ID %}">
+            {% csrf_token %}
+            <input type="submit" name="submit" value="Return to Homepage" />
+        </form>
+    </div>
+{% endblock %}

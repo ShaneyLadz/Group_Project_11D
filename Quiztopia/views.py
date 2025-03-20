@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
-from Quiztopia.models import UserProfile, Question, Quiz
+from Quiztopia.models import UserProfile, Question, Quiz, Answer
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -139,6 +139,8 @@ def take_quiz(request, category_slug, quiz_id):
             selected_answers[f"question_{i}"] = request.POST.get(str(i))
             i += 1
 
+        request.session["selected_answers"] = selected_answers
+
         return redirect(reverse("Quiztopia:quiz_results",
                                 kwargs = {"category_slug" : category_slug,
                                           "quiz_id" : quiz_id}))
@@ -165,4 +167,58 @@ def take_quiz(request, category_slug, quiz_id):
     
 
 def quiz_results(request, category_slug, quiz_id):
-    return HttpResponse("This view is in progress")
+
+    if request.method == 'POST':
+        #request.session.flush()
+        return redirect(reverse("Quiztopia:index"))
+    
+    else:
+        selected_answers = request.session.get("selected_answers")
+        del request.session["selected_answers"]
+
+        context_dict = {}
+        quiz = Quiz.objects.get(quiz_ID = quiz_id, category_slug = category_slug)
+        questions = Question.objects.filter(quiz_ID = quiz_id)
+
+        context_dict["quiz"] = quiz
+        context_dict["questions_answers_selections"] = []
+        context_dict["no_questions"] = len(questions)
+
+        for index, question in enumerate(questions):
+            answers = Answer.objects.filter(question_ID = question.question_ID)
+            selected_answer = selected_answers[f"question_{index+1}"]
+
+            context_dict["questions_answers_selections"].append((question, answers, int(selected_answer)))
+
+        score, no_correct = compute_results(context_dict)
+        context_dict["score"] = score
+        context_dict["no_correct"] = no_correct
+
+        return render(request, 'Quiztopia/quiz_results.html', context_dict)
+
+
+def compute_results(context_dict):
+
+    EASY_MULTIPLIER = 1
+    MEDIUM_MULTIPLIER = 1.5
+    HARD_MULTIPLIER = 2
+
+    no_correct = 0
+    for question, answers, selected in context_dict["questions_answers_selections"]:
+        # Since answers start at index 0, selected is decremented
+        selected_answer = answers[selected-1]
+
+        if selected_answer.is_correct:
+            no_correct += 1
+
+    quiz = context_dict["quiz"]
+    multiplier = 0
+
+    if quiz.difficulty == "Easy":
+        multiplier = EASY_MULTIPLIER
+    elif quiz.difficulty == "Medium":
+        multiplier = MEDIUM_MULTIPLIER
+    elif quiz.difficulty == "Hard":
+        multiplier = HARD_MULTIPLIER
+
+    return no_correct * multiplier, no_correct
