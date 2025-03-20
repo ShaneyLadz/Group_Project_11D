@@ -5,10 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
 from Quiztopia.models import UserProfile, Question, Quiz, Answer
-<<<<<<< HEAD
 import json
-=======
->>>>>>> fbe0016367c1f64d8e8ee67d6d2d743e645712ca
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
