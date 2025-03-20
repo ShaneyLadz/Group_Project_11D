@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
 from Quiztopia.models import UserProfile, Question, Quiz, Answer
+import json
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -167,14 +168,28 @@ def take_quiz(request, category_slug, quiz_id):
     
 
 def quiz_results(request, category_slug, quiz_id):
-
     if request.method == 'POST':
-        #request.session.flush()
-        return redirect(reverse("Quiztopia:index"))
-    
+        #del request.session["selected_answers"]
+        try:
+            data = json.loads(request.body)
+            print("WORKS")
+            print(data)
+
+            quiz = Quiz.objects.get(quiz_ID = quiz_id, category_slug = category_slug)
+            if data["vote"] == "upvote":
+                quiz.upvotes += 1
+            elif data["vote"] == "downvote" and quiz.upvotes > 0:
+                quiz.upvotes -= 1
+            quiz.save()
+
+            return JsonResponse({})
+        except:
+            # When the return-to-homepage button is click, this will run since a
+            # json request is not being processed (from clicking thumbs up or down)
+            return redirect(reverse("Quiztopia:index"))
+        
     else:
         selected_answers = request.session.get("selected_answers")
-        del request.session["selected_answers"]
 
         context_dict = {}
         quiz = Quiz.objects.get(quiz_ID = quiz_id, category_slug = category_slug)
@@ -194,14 +209,18 @@ def quiz_results(request, category_slug, quiz_id):
         context_dict["score"] = score
         context_dict["no_correct"] = no_correct
 
+        user = UserProfile.objects.get(user = request.user)
+        user.points += score
+        user.save()
+
         return render(request, 'Quiztopia/quiz_results.html', context_dict)
 
 
 def compute_results(context_dict):
 
     EASY_MULTIPLIER = 1
-    MEDIUM_MULTIPLIER = 1.5
-    HARD_MULTIPLIER = 2
+    MEDIUM_MULTIPLIER = 2
+    HARD_MULTIPLIER = 3
 
     no_correct = 0
     for question, answers, selected in context_dict["questions_answers_selections"]:
