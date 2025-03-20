@@ -7,7 +7,7 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 class QuizAdmin(admin.ModelAdmin):
 
-    list_display = ('quiz_ID', 'quiz_title', 'category', 'difficulty','upvotes','creator')
+    list_display = ('quiz_ID', 'quiz_title', 'category', 'difficulty','upvotes','creator', 'category_slug')
 
 class QuestionAdmin(admin.ModelAdmin):
 

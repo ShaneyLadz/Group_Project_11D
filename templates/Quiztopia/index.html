@@ -1,7 +1,7 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
-{% block content %}
+{% block body_block %}
     <h1>Welcome to Quiztopia!</h1>
     <h2>Categories</h2>
     <ul>
@@ -9,5 +9,23 @@
             <li><a href="{% url 'Quiztopia:category' category.0 %}">{{ category.1 }}</a></li>
         {% endfor %}
     </ul>
+
+    <table>
+        <tr>
+            <th>Position</th>
+            <th>Username</th>
+            <th>Points</th>
+            <th>Quizzes Taken</th>
+        </tr>
+        {% for user in top_users %}
+            <tr>
+                <td>#{{ forloop.counter }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.points }}</td>
+                <td>{{ user.quizzes_taken }}</td>
+            </tr>
+            
+        {% endfor %}
+    </table>
 {% endblock %}
 
