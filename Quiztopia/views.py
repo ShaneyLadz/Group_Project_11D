@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
-from Quiztopia.models import UserProfile, Question, Quiz
+from Quiztopia.models import UserProfile, Question, Quiz, Answer
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -15,11 +15,12 @@ CATEGORIES = [
 ]
 
 def index(request):
-    return render(request, 'Quiztopia/index.html', {'categories': CATEGORIES})
+    top_users = UserProfile.objects.order_by("-points")[:10]
+    return render(request, 'Quiztopia/index.html', {'categories': CATEGORIES, 'top_users' : top_users})
 
-def category_view(request, category_name):
-    quizzes = Quiz.objects.filter(category=category_name)
-    return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_name})
+def category_view(request, category_slug):
+    quizzes = Quiz.objects.filter(category_slug=category_slug)
+    return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_slug})
 
 def register(request):
     registered = False
@@ -71,6 +72,11 @@ def user_login(request):
         
     else:
         return render(request, 'Quiztopia/login.html')
+    
+@login_required
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('Quiztopia:index'))
     
 @login_required
 def add_quiz(request):

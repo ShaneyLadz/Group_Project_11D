@@ -11,6 +11,9 @@
     <body>
         <div>
             {% block header_block %}
+                {% if user.is_authenticated %}
+                    <a href="{% url 'Quiztopia:logout' %}">Logout</a></li>
+                {% endif %}
                 <a href = "{% url 'Quiztopia:index' %}">Home</a>
                 <a href="{% url 'Quiztopia:login' %}">Login</a>
                 <h1>Quiztopia</h1>
