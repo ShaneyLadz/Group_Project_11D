@@ -6,7 +6,9 @@
     <div>
         <form id="quiz_form" method="post" action="{% url 'Quiztopia:add_quiz' %}">
             {% csrf_token %}
-            {{ form.as_p }}
+            <input type="text" name="quiz_title" maxlength="200" placeholder="Enter quiz title" required>
+            {{ form.category }}
+            {{ form.difficulty }}
             {{ questions.management_form }}
             <div id="questions">
                 {% for question, answers in questions_and_answers %}
