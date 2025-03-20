@@ -42,7 +42,7 @@ class Quiz(models.Model):
         verbose_name_plural = 'Quizzes'
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.category)
+        self.category_slug = slugify(self.category)
         super(Quiz, self).save(*args, **kwargs)
 
     def __str__(self):
