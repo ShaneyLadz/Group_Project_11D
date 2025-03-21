@@ -94,6 +94,8 @@ def add_quiz(request):
             quiz.creator = creator
             form.save(commit=True)
         
+            creator.quizzes_created += 1
+            creator.save()
             
             for i, question_form in enumerate(question_formset):
                     if question_form.cleaned_data:
@@ -125,16 +127,17 @@ def add_quiz(request):
         answer_formsets = [AnswerFormSet(prefix=f'answers-{i}') for i in range(10)]
         question_answer_pairs = zip(question_formset, answer_formsets)
 
-
     return render(request, 'Quiztopia/add_quiz.html', {'form' : form, 'questions' : question_formset, 'questions_and_answers' : question_answer_pairs})
 
 
 def take_quiz(request, category_slug, quiz_id):
     
     if request.method == 'POST':
-        user = UserProfile.objects.get(user = request.user)
-        user.quizzes_taken += 1
-        user.save()
+
+        if request.user.is_authenticated:
+            user = UserProfile.objects.get(user = request.user)
+            user.quizzes_taken += 1
+            user.save()
 
         # Radio buttons which user selected for each question
         # Note, you'll want these for quiz_results
@@ -214,12 +217,18 @@ def quiz_results(request, category_slug, quiz_id):
             context_dict["questions_answers_selections"].append((question, answers, int(selected_answer)))
 
         score, no_correct = compute_results(context_dict)
-        context_dict["score"] = score
-        context_dict["no_correct"] = no_correct
 
-        user = UserProfile.objects.get(user = request.user)
-        user.points += score
-        user.save()
+        # If score is -1, then template will not display score
+        context_dict["score"] = -1
+        context_dict["no_correct"] = no_correct
+        
+        if request.user.is_authenticated:
+            user = UserProfile.objects.get(user = request.user)
+            user.points += score
+            user.save()
+
+            # User is logged in, so we want to display the score they earned
+            context_dict["score"] = score
 
         return render(request, 'Quiztopia/quiz_results.html', context_dict)
 
