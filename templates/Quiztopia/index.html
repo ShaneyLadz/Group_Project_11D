@@ -3,12 +3,8 @@
 
 {% block body_block %}
     <h1>Welcome to Quiztopia!</h1>
-    <h2>Categories</h2>
-    <ul>
-        {% for category in categories %}
-            <li><a href="{% url 'Quiztopia:category' category.0 %}">{{ category.1 }}</a></li>
-        {% endfor %}
-    </ul>
+    <a href="{% url 'Quiztopia:categories' %}"><h2>Categories</h2></a>
+
 
     <table>
         <tr>
