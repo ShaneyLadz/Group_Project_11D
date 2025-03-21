@@ -1,0 +1,48 @@
+{% extends "Quiztopia/base.html" %}
+{% load staticfiles %}
+
+{% block title_block %}
+
+<title>Quiztopia Categories</title>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+
+{% endblock %}
+
+{% block body_block %}
+    <h2>Categories</h2>
+    <div class="categories">
+        <div class="category">
+            <a href="{% url 'Quiztopia:category' categories.2 %}">
+                <img src="{% static 'images/GeneralKnowledge.jpg' %}" alt="General Knowledge" />
+                <p>General Knowledge</p>
+            </a>
+        </div>
+        <div class="category">
+            <a href="{% url 'Quiztopia:category' categories.3 %}">
+                <img src="{% static 'images/sports.jpg' %}" alt="Sport" />
+                <p>Sport</p>
+            </a>
+        </div>
+        <div class="category">
+            <a href="{% url 'Quiztopia:category' categories.4 %}">
+                <img src="{% static 'images/Other.jpg' %}" alt="Other" />
+                <p>Other</p>
+            </a>
+        </div>
+    </div>
+    <div class="bottom-row">
+        <div class="category">
+            <a href="{% url 'Quiztopia:category' categories.1 %}">
+                <img src="{% static 'images/Animal.jpg' %}" alt="Animals" />
+                <p>Animals</p>
+            </a>
+        </div>
+        <div class="category">
+            <a href="{% url 'Quiztopia:category' categories.0 %}">
+                <img src="{% static 'images/movie.jpg' %}" alt="Movies & TV" />
+                <p>Movies & TV</p>
+            </a>
+        </div>
+    </div>
+{% endblock %}

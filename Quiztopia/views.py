@@ -8,16 +8,15 @@ from Quiztopia.models import UserProfile, Question, Quiz, Answer
 import json
 
 CATEGORIES = [
-    ("Movies And TV", "Movies And TV"),
-    ("Animals", "Animals"),
-    ("General Knowledge", "General Knowledge"),
-    ("Sports", "Sports"),
-    ("Other", "Other"),
+    "movies-and-tv", "animals", "general-knowledge", "sports", "other"
 ]
 
 def index(request):
     top_users = UserProfile.objects.order_by("-points")[:10]
     return render(request, 'Quiztopia/index.html', {'categories': CATEGORIES, 'top_users' : top_users})
+
+def categories_view(request):
+    return render(request, 'Quiztopia/categories.html', {'categories' : CATEGORIES})
 
 def category_view(request, category_slug):
     quizzes = Quiz.objects.filter(category_slug=category_slug)
