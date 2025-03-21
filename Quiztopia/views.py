@@ -176,22 +176,24 @@ def take_quiz(request, category_slug, quiz_id):
 def quiz_results(request, category_slug, quiz_id):
     if request.method == 'POST':
         #del request.session["selected_answers"]
+
+        # This code will run when the thumbs-up or thumbs-down is clicked
+        # on the quiz results page.
         try:
             data = json.loads(request.body)
-            print("WORKS")
-            print(data)
 
             quiz = Quiz.objects.get(quiz_ID = quiz_id, category_slug = category_slug)
             if data["vote"] == "upvote":
                 quiz.upvotes += 1
-            elif data["vote"] == "downvote" and quiz.upvotes > 0:
+            elif data["vote"] == "downvote":
                 quiz.upvotes -= 1
             quiz.save()
 
             return JsonResponse({})
-        except:
-            # When the return-to-homepage button is click, this will run since a
-            # json request is not being processed (from clicking thumbs up or down)
+        
+        except json.JSONDecodeError:
+            # When the return-to-homepage button is clicked, this code will run since a
+            # json request is not being processed (from clicking thumbs-up or thumbs-down).
             return redirect(reverse("Quiztopia:index"))
         
     else:

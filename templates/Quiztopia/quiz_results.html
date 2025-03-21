@@ -32,6 +32,8 @@
 
                         {% if answer.is_correct %}
                             <b><span style="color:green;">{{ answer }}</span></b>
+                        {% elif not answer.is_correct and forloop.counter == selection %}
+                            <b><span style="color:red;">{{ answer }}</span></b>
                         {% else %}
                             {{ answer }}
                         {% endif %}
