@@ -61,7 +61,7 @@
     addQuestion.addEventListener("click", function(){
         if(numberOfQuestions < 10){
         
-            const form = document.getElementById(`question-${numberOfQuestions+1}`);
+            const form = questions.children[numberOfQuestions]
     
             if (form && form.style.display=="none") {
                 numberOfQuestions++;
