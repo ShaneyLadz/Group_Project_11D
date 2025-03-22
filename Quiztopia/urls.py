@@ -1,5 +1,5 @@
 from django.urls import path
-from Quiztopia import views 
+from Quiztopia import views
 
 app_name = 'Quiztopia'
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path('categories/<str:category_slug>/<int:quiz_id>/take_quiz/', views.take_quiz, name = 'take_quiz'),
     path('categories/<str:category_slug>/<int:quiz_id>/take_quiz/quiz_results/', views.quiz_results, name = "quiz_results"),
     path('logout/', views.user_logout, name='logout'),
+    path('login/profile', views.profile, name='profile'),
 ]

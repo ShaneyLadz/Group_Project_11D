@@ -3,9 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
 from Quiztopia.models import UserProfile, Question, Quiz, Answer
 import json
+import os
 
 CATEGORIES = [
     ("Movies And TV", "Movies And TV"),
@@ -258,3 +260,28 @@ def compute_results(context_dict):
         multiplier = HARD_MULTIPLIER
 
     return no_correct * multiplier, no_correct
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            user = UserProfile.objects.get(user = request.user)
+            if user.profile_picture:
+                old_profile_picture = user.profile_picture
+
+                #path = os.path.join(settings.MEDIA_ROOT, old_profile_picture.name)
+                path = old_profile_picture.path
+                os.remove(path)
+
+            user.profile_picture = request.FILES["profile_picture"]
+            user.save()
+            
+            return JsonResponse({"url" : user.profile_picture.url,})
+
+    else:
+        user = UserProfile.objects.get(user = request.user)
+        profile_form = UserProfileForm()
+
+        return render(request, 'Quiztopia/profile.html', {"user" : user, "profile_form" : profile_form})
