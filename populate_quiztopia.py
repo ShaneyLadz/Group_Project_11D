@@ -1,5 +1,6 @@
 # Please see the 'Population Script' section in the README.md for this codes overall explanation
 
+######################################## INITIAL SETUP ########################################
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'Group_Project_11D.settings')
@@ -17,6 +18,50 @@ import html
 # Import to show the progress of the script
 from tqdm import tqdm # Needs to be installed using pip
 
+###################################### ENVIRONMENT SETUP ########################################
+# The following functions will ensure that the required packages are installed, the database is 
+# reset, and a superuser admin is created before the population script runs.
+import subprocess
+import sys
+
+# Ensure required packages are installed
+def install_packages():
+    print("Ensuring required packages are installed...")
+    required_packages = ["tqdm", "requests"]
+    for package in required_packages:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+    print("All required packages are installed.")
+
+
+# Delete the old database
+def reset_database():
+    print("Resetting the database...")
+    if os.path.exists("db.sqlite3"):
+        os.remove("db.sqlite3")
+        print("Old database deleted.")
+    else:
+        print("No existing database found.")
+
+    print("Making migrations...")
+    os.system("python manage.py makemigrations")
+    os.system("python manage.py migrate")
+    print("Database reset and migrations applied.")
+
+# Create a superuser admin
+def create_superuser():
+    print("Creating a superuser admin...")
+    try:
+        from django.contrib.auth.models import User
+        if not User.objects.filter(username="admin").exists():
+            User.objects.create_superuser("admin", "admin@example.com", "admin123")
+            print("Superuser 'admin' created with password 'admin123'.")
+        else:
+            print("Superuser 'admin' already exists.")
+    except Exception as e:
+        print(f"Error creating superuser: {e}")
+
+###################################### POPULATION SCRIPT ########################################
+# The population script will create users, quizzes, questions, and answers in the database
 def populate():
     # CREATING THE USERS
     print('Creating users...')
@@ -171,8 +216,12 @@ def add_user(name, image=None, points=0, quizzes_taken=0, quizzes_created=0):
         u.save()
     return u
 
+###################################### SCRIPT EXECUTION ########################################
 # The script starts running here
 if __name__ == '__main__':
     print('Starting Quiztopia population script...')
+    install_packages()
+    reset_database()
+    create_superuser()
     populate()
     print('Quiztopia population script completed.')
