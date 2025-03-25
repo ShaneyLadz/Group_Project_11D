@@ -263,24 +263,43 @@ def compute_results(context_dict):
 @login_required
 def profile(request):
     if request.method == "POST":
-        form = UserProfileForm(request.POST, request.FILES)
+        action = request.POST.get("add_edit_quiz")
+        if action and action == "Add Quiz":
+            return redirect(reverse("Quiztopia:add_quiz"))
+        elif action and action == "Edit Quiz":
+            # Edit this when edit_quiz is added -> Whoever is working on edit_quiz ! !
+            return HttpResponse("In Progress.")
+        
+        # Request to delete a quiz
+        if request.content_type == "application/json":
+            data = json.loads(request.body)
+            quiz_id = data["selected"]
 
-        if form.is_valid():
-            user = UserProfile.objects.get(user = request.user)
-            if user.profile_picture:
-                old_profile_picture = user.profile_picture
+            quiz = Quiz.objects.get(quiz_ID = quiz_id)
+            quiz.delete()
 
-                #path = os.path.join(settings.MEDIA_ROOT, old_profile_picture.name)
-                path = old_profile_picture.path
-                os.remove(path)
+            return JsonResponse({})
 
-            user.profile_picture = request.FILES["profile_picture"]
-            user.save()
-            
-            return JsonResponse({"url" : user.profile_picture.url,})
+        # Request to change profile picture
+        elif request.content_type == "multipart/form-data":
+            form = UserProfileForm(request.POST, request.FILES)
+            if form.is_valid():
+                user = UserProfile.objects.get(user = request.user)
+
+                if user.profile_picture:
+                    old_profile_picture = user.profile_picture
+
+                    #path = os.path.join(settings.MEDIA_ROOT, old_profile_picture.name)
+                    path = old_profile_picture.path
+                    os.remove(path)
+
+                user.profile_picture = request.FILES["profile_picture"]
+                user.save()
+                
+                return JsonResponse({"url" : user.profile_picture.url,})
 
     else:
         user = UserProfile.objects.get(user = request.user)
-        profile_form = UserProfileForm()
-
-        return render(request, 'Quiztopia/profile.html', {"user" : user, "profile_form" : profile_form})
+        quizzes = Quiz.objects.filter(creator = user.username)
+        
+        return render(request, 'Quiztopia/profile.html', {"user" : user, "quizzes" : quizzes})

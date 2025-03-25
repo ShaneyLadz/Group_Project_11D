@@ -2,7 +2,6 @@
 const profileButton = document.getElementById("profile_change");
 // id=file_input is an invisible element, only serving to open file prompt
 const filePrompt = document.getElementById("file_input");
-var label = document.getElementById("change_this");
 var image = document.getElementById("profile");
 
 profileButton.addEventListener("click", function() {
