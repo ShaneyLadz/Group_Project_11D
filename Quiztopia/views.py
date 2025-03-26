@@ -24,6 +24,12 @@ def category_view(request, category_slug):
     quizzes = Quiz.objects.filter(category_slug=category_slug)
     return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_slug})
 
+def about(request):
+    return render(request, 'Quiztopia/aboutUs.html')
+
+def faq(request):
+    return render(request, 'Quiztopia/faq.html')
+
 def register(request):
     registered = False
     
