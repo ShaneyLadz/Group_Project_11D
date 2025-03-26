@@ -180,7 +180,7 @@ def add_answer(text, question, answer):
     )
     return a
     
-def add_user(name, image=None, points=0, quizzes_taken=0, quizzes_created=0):
+def add_user(name, image='profile_pictures/default_profile.jpg', points=0, quizzes_taken=0, quizzes_created=0):
     # Create or get the User object
     user, created = User.objects.get_or_create(username=name)
     

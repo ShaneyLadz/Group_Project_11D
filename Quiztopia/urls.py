@@ -14,4 +14,6 @@ urlpatterns = [
     path('categories/<str:category_slug>/<int:quiz_id>/take_quiz/quiz_results/', views.quiz_results, name = "quiz_results"),
     path('logout/', views.user_logout, name='logout'),
     path('login/profile', views.profile, name='profile'),
+    path('aboutUs', views.about, name='aboutUs'),
+    path('FAQ', views.faq, name="FAQ"),
 ]

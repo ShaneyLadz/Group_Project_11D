@@ -9,14 +9,19 @@
     <table>
         <tr>
             <th>Position</th>
-            <th>Username</th>
+            <th>User</th>
             <th>Points</th>
             <th>Quizzes Taken</th>
         </tr>
         {% for user in top_users %}
             <tr>
                 <td>#{{ forloop.counter }}</td>
-                <td>{{ user.username }}</td>
+                <td>
+                    {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile" width="35" height="35" />
+                    {% endif %}
+                    {{ user.username }}
+                </td>
                 <td>{{ user.points }}</td>
                 <td>{{ user.quizzes_taken }}</td>
             </tr>

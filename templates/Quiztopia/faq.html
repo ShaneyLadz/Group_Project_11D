@@ -1,0 +1,41 @@
+{% extends 'Quiztopia/base.html' %}
+{% load staticfiles %}
+
+{% block body_block %}
+    <h2>FAQ Page</h2>
+
+    <ol>
+        <li><strong>What is Quiztopia?</strong>
+            <p>Quiztopia is an interactive quiz platform where users can test their knowledge, create their own quizzes,
+                 and compete with others on the leaderboard.</p>
+        </li>
+        <li><strong>Do I need to create an account to take quizzes?</strong>
+            <p>No, unregistered users can take quizzes without creating an account as well as rate them. 
+                However, registering provides additional features like quiz creation and the leaderboard.</p>
+        </li>
+        <li><strong>How can I register for an account?</strong>
+            <p>You can register by clicking on the 'Sign Up' button on the homepage and filling out the required fields. 
+                It only takes a few seconds!</p>
+        </li>
+        <li><strong>Can I create my own quizzes?</strong>
+            <p>Absolutely! Registered users can create and customize their own quizzes.</p>
+        </li>
+        <li><strong>How does the leaderboard work?</strong>
+            <p>The leaderboard tracks and displays the top users based on their quiz scores and participation. 
+                Compete with others to see who ranks at the top!</p>
+        </li>
+        <li><strong>Can I rate quizzes?</strong>
+            <p>Yes! After completing a quiz, registered users have the option to rate it, 
+                giving feedback to the creators and helping other users find great content.</p>
+        </li>
+        <li><strong>What should I do if I encounter a problem or have feedback?</strong>
+            <p>We welcome your feedback! 
+                You can reach out to us through our contact page or send an email to 3070943s@student.gla.ac.uk.</p>
+        </li>
+        <li><strong>Is there a mobile app available?</strong>
+            <p>Currently, we only have a web application. 
+                However, we are considering developing a mobile app in the future based on user demand.</p>
+        </li>
+    </ol>
+
+{% endblock %}
