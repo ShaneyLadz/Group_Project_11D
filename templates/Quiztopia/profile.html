@@ -5,8 +5,10 @@
 
     <div>
         <div id="profile_stats">
-            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profile"
-            width="320" height="300" />
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profile"
+                width="320" height="300" />
+            {% endif %}
 
             <button id="profile_change">Change Picture</button>
             <input type="file" id="file_input" style="display:none;" />
