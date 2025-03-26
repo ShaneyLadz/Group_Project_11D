@@ -47,7 +47,6 @@ class Quiz(models.Model):
 
     def __str__(self):
         return self.quiz_title
-    
 
 class Question(models.Model):
 
@@ -65,10 +64,6 @@ class Answer(models.Model):
     is_correct = models.BooleanField(default=False)
     question_ID = models.ForeignKey(Question, on_delete=models.CASCADE, to_field='question_ID')
 
-
-
     def __str__(self):
         return self.answer_text
     
-
-
