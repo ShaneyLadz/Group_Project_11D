@@ -43,6 +43,8 @@ def register(request):
 
             if 'profile_picture' in request.FILES:
                 profile.profile_picture = request.FILES['profile_picture']
+            else:
+                profile.profile_picture = 'profile_pictures/default_profile.jpg'
             
             profile.save()
             registered = True
@@ -286,7 +288,9 @@ def profile(request):
             if form.is_valid():
                 user = UserProfile.objects.get(user = request.user)
 
-                if user.profile_picture:
+                # Deleting a user's old profile picture from the media folder,
+                # unless it's the default profile picture
+                if user.profile_picture != 'profile_pictures/default_profile.jpg':
                     old_profile_picture = user.profile_picture
 
                     #path = os.path.join(settings.MEDIA_ROOT, old_profile_picture.name)

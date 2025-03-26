@@ -5,13 +5,8 @@
 
     <div>
         <div id="profile_stats">
-            {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profile"
-                width="320" height="300" />
-            {% else %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="Profile Picture" id="profile"
-                width="320" height="300" />
-            {% endif %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profile"
+            width="320" height="300" />
 
             <button id="profile_change">Change Picture</button>
             <input type="file" id="file_input" style="display:none;" />
