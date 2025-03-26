@@ -15,4 +15,6 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('login/profile', views.profile, name='profile'),
     path('edit_quiz/<int:quiz_id>/', views.edit_quiz, name='edit_quiz'),
+    path('aboutUs', views.about, name='aboutUs'),
+    path('FAQ', views.faq, name="FAQ"),
 ]

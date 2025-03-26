@@ -8,9 +8,6 @@
             {% if user.profile_picture %}
                 <img src="{{ user.profile_picture.url }}" alt="Profile Picture" id="profile"
                 width="320" height="300" />
-            {% else %}
-                <img src="{% static 'images/default_profile.jpg' %}" alt="Profile Picture" id="profile"
-                width="320" height="300" />
             {% endif %}
 
             <button id="profile_change">Change Picture</button>
@@ -19,17 +16,53 @@
             <div id="stats">
                 <h3>
                 Signed in as: {{ user.username }} <br />
-                User score: {{ user.points }} <br />
+                User Score: {{ user.points }} <br />
                 Quizzes Taken: {{ user.quizzes_taken }} <br />
                 Quizzes Created: {{ user.quizzes_created }}
                 </h3>
             </div>
-           
         </div>
+
+        <div id="quizzes">
+            <table>
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Difficulty</th>
+                    <th>Upvotes</th>
+                </tr>
+
+                {% for quiz in quizzes %}
+                    <tr>
+                        <td>
+                            <input type="radio" name="radio" value="{{ quiz.quiz_ID }}" />
+                        </td>
+                        <td>
+                            <a href="{% url 'Quiztopia:take_quiz' quiz.category_slug quiz.quiz_ID %}">
+                                {{ quiz.quiz_title }}
+                            </a>
+                        </td>
+                        <td>{{ quiz.category }}</td>
+                        <td>{{ quiz.difficulty }}</td>
+                        <td>{{ quiz.upvotes }}</td>
+
+                    </tr>
+                {% endfor %}
+            </table>   
+        </div>
+
+            <button id="Delete">Delete Quiz</button>
+            <form id="add_edit_form" method="post" action="{% url 'Quiztopia:profile' %}" >
+                {% csrf_token %}
+                <input type="submit" name="add_edit_quiz" value="Edit Quiz" />
+                <input type="submit" name="add_edit_quiz" value="Add Quiz" />
+            </form>
     </div>
 
     <script src="{% static 'js/changeProfile.js' %}"></script>
+    <script src="{% static 'js/deleteQuiz.js' %}"></script>
     <script>
-        const url = "{% url 'Quiztopia:profile' %}";
+        const url = "{% url 'Quiztopia:profile' %}"
     </script>
 {% endblock %}
