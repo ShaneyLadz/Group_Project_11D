@@ -1,6 +1,6 @@
 from django import forms 
 from Quiztopia.models import Quiz, Question, Answer, User, UserProfile
-from django.forms import formset_factory, inlineformset_factory
+from django.forms import formset_factory, inlineformset_factory, modelformset_factory
 
 class QuizForm(forms.ModelForm):
 
@@ -23,12 +23,13 @@ class QuestionForm(forms.ModelForm):
 
 class AnswerForm(forms.ModelForm):
 
+    answer_ID = forms.IntegerField(widget=forms.HiddenInput(), required=False)
     answer_text = forms.CharField(max_length=200, help_text="Enter an answer")
     is_correct = forms.BooleanField(required=False,widget=forms.RadioSelect())
 
     class Meta:
         model = Answer
-        fields = ('answer_text','is_correct')
+        fields = ('answer_text','is_correct','answer_ID')
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -42,5 +43,18 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('profile_picture',)
 
-QuestionFormSet = formset_factory(QuestionForm, extra=10,min_num=0,max_num=10)
+class EditQuestionForm(forms.ModelForm):
+
+    question_text = forms.CharField(max_length=500,required=True)
+
+    class Meta:
+        model = Question
+        fields = ('question_text',)
+
+        
+
+
+QuestionFormSet = modelformset_factory(Question, form=QuestionForm, extra=10,min_num=0,max_num=10)
 AnswerFormSet = inlineformset_factory(Question, Answer, form=AnswerForm, extra=4, max_num=4, can_delete=False)
+EditQuestionFormSet = modelformset_factory(Question, form=EditQuestionForm, extra=0,min_num=0,max_num=10)
+EditAnswerFormSet = inlineformset_factory(Question, Answer, form=AnswerForm, extra=4, max_num=4, can_delete=False)
