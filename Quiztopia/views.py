@@ -181,7 +181,7 @@ def edit_quiz(request, quiz_id):
         answer_formsets = [AnswerFormSet(instance=questions[i], prefix=f'answers-{i}') for i in range(len(questions))]
         question_answer_pairs = zip(question_formset, answer_formsets)
 
-    return render(request, 'Quiztopia/edit_quiz.html', {'form': quiz_form, 'questions' : question_formset, 'questions_and_answers': question_answer_pairs, "quiz_id" : quiz_id})
+    return render(request, 'Quiztopia/edit_quiz.html', {'form': quiz_form, 'questions' : question_formset, 'questions_and_answers': question_answer_pairs, "quiz_id" : quiz_id, 'profile' : quiz.creator})
 
 def take_quiz(request, category_slug, quiz_id):
     
