@@ -345,7 +345,7 @@ def profile(request):
                     "profile_pictures/profile_1.png",
                     "profile_pictures/profile_2.png",
                     "profile_pictures/profile_3.png",
-                    "profile_pictures/profile_4.png"
+                    "profile_pictures/profile_4.png",
                     "profile_pictures/profile_5.png",
                     "profile_pictures/admin_profile.png"
                 ]
