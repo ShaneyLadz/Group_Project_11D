@@ -40,34 +40,5 @@
             </form>
         </div>
     {% endif %}
-    <script>
-
-        const questions = document.getElementById("questions")
-        var numberOfQuestions = questions.children.length;
-    
-        document.getElementById('quiz_form').addEventListener('submit', function(event) {
-            let valid = true;
-            var counter = 1
-    
-            const questionDivs = Array.from(questions.children)
-            questionDivs.forEach((questionDiv) => {
-                const correctAnswer = questionDiv.querySelector('input[type="radio"]:checked');
-    
-                if (correctAnswer) {
-                    const correctAnswerInput = correctAnswer.closest('.answer').querySelector('input[type="text"]');
-                    
-                    if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
-                        alert(`Cannot select a blank answer as correct for question ${counter}. Please select a non blank answer as correct`);
-                        valid = false;
-                    }
-                } 
-                counter++
-            });
-    
-            if (!valid) {
-                event.preventDefault(); 
-            }
-        });
-    </script>
-    {% endblock %}
-    
+    <script src="{% static 'js/editQuiz.js' %}"></script>
+{% endblock %}
