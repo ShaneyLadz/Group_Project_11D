@@ -3,64 +3,42 @@
 
 {% block body_block %}
     <h1>Edit a Quiz</h1>
-    <div>
-        <form id="quiz_form" method="post" action="{% url 'Quiztopia:edit_quiz' quiz_id %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {{ questions.management_form }}
-            {{ answers.management_form }}
-            <div id="questions">
-                {% for question, answers in questions_and_answers %}
-                {{ question.management_form }}
-                    <div id="question-{{forloop.counter }}">
-                        <h3 id="questionHeader">Question {{ forloop.counter }}</h3>
-                        {{ question.as_p }}
-                        
-                        <h3>Answers:</h3>
-                        {{ answers.management_form }}
-                        {% for answer in question.instance.answer_set.all %}
-                            <div class="answer">
-                                <input type="text" name="answers-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}-answer_text"
-                                    value="{{ answer.answer_text }}" maxlength="200" required>
-                                <input type="radio" name="correct_answer_question_{{ forloop.parentloop.counter0 }}"
-                                    value="{{ forloop.counter0 }}" {% if answer.is_correct %}checked{% endif %}> Correct?
-                                <input type="hidden" name="answers-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}-answer_ID" value="{{ answer.answer_ID }}">
-                            </div>
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
+    {% if profile.user != user %}
+            <div class="alert text-center">
+                <strong>You do not have permission to edit this quiz</strong><br>
+                <a href="{% url 'Quiztopia:index' %}" class="btn btn-primary mt-3">Return to Homepage</a>
             </div>
-            <input type="submit" name="submit" value="Edit Quiz" />
-        </form>
-    </div>
-    <script>
-
-        const questions = document.getElementById("questions")
-        var numberOfQuestions = questions.children.length;
-    
-        document.getElementById('quiz_form').addEventListener('submit', function(event) {
-            let valid = true;
-            var counter = 1
-    
-            const questionDivs = Array.from(questions.children)
-            questionDivs.forEach((questionDiv) => {
-                const correctAnswer = questionDiv.querySelector('input[type="radio"]:checked');
-    
-                if (correctAnswer) {
-                    const correctAnswerInput = correctAnswer.closest('.answer').querySelector('input[type="text"]');
-                    
-                    if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
-                        alert(`Cannot select a blank answer as correct for question ${counter}. Please select a non blank answer as correct`);
-                        valid = false;
-                    }
-                } 
-                counter++
-            });
-    
-            if (!valid) {
-                event.preventDefault(); 
-            }
-        });
-    </script>
-    {% endblock %}
-    
+    {% else %}
+        <div>
+            <form id="quiz_form" method="post" action="{% url 'Quiztopia:edit_quiz' quiz_id %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                {{ questions.management_form }}
+                {{ answers.management_form }}
+                <div id="questions">
+                    {% for question, answers in questions_and_answers %}
+                    {{ question.management_form }}
+                        <div id="question-{{forloop.counter }}">
+                            <h3 id="questionHeader">Question {{ forloop.counter }}</h3>
+                            {{ question.as_p }}
+                            
+                            <h3>Answers:</h3>
+                            {{ answers.management_form }}
+                            {% for answer in question.instance.answer_set.all %}
+                                <div class="answer">
+                                    <input type="text" name="answers-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}-answer_text"
+                                        value="{{ answer.answer_text }}" maxlength="200" required>
+                                    <input type="radio" name="correct_answer_question_{{ forloop.parentloop.counter0 }}"
+                                        value="{{ forloop.counter0 }}" {% if answer.is_correct %}checked{% endif %}> Correct?
+                                    <input type="hidden" name="answers-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}-answer_ID" value="{{ answer.answer_ID }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                </div>
+                <input type="submit" name="submit" value="Edit Quiz" />
+            </form>
+        </div>
+    {% endif %}
+    <script src="{% static 'js/editQuiz.js' %}"></script>
+{% endblock %}
