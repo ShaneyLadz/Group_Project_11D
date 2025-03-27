@@ -1,7 +1,7 @@
 const questions = document.getElementById("questions");
 const addQuestion = document.getElementById("addQuestion");
 const deleteQuestion = document.getElementById("deleteQuestion");
-var numberOfQuestions = questions.children.length;
+var numberOfQuestions = 10;
 
 function updateTotalForms() {
     document.querySelector('#id_questions-TOTAL_FORMS').value = numberOfQuestions;
@@ -9,7 +9,7 @@ function updateTotalForms() {
 
 addQuestion.addEventListener("click", function () {
     if (numberOfQuestions < 10) {
-        const form = questions.children[numberOfQuestions];
+        const form = questions.children[numberOfQuestions + 4];
         if (form && form.style.display === "none") {
             numberOfQuestions++;
             form.style.display = "block";
@@ -21,7 +21,7 @@ addQuestion.addEventListener("click", function () {
 
 deleteQuestion.addEventListener("click", function () {
     if (numberOfQuestions > 1) {
-        const form = questions.children[numberOfQuestions - 1];
+        const form = questions.children[numberOfQuestions + 3];
         if (form && form.style.display !== "none") {
             form.style.display = "none";
             form.querySelectorAll('input, select, button, textarea').forEach(element => element.disabled = true);
@@ -41,7 +41,7 @@ document.getElementById('quiz_form').addEventListener('submit', function (event)
         if (correctAnswer) {
             const correctAnswerInput = correctAnswer.closest('.input-group').querySelector('input[type="text"]');
             if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
-                alert(`Cannot select a blank answer as correct for question ${counter}. Please select a valid answer.`);
+                alert(`Cannot select a blank answer as correct for question ${counter-4}. Please select a valid answer.`);
                 valid = false;
             }
         }
