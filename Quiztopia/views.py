@@ -330,7 +330,7 @@ def profile(request):
             quiz = Quiz.objects.get(quiz_ID = quiz_id)
 
             quiz.delete()
-            
+
             quiz.creator.quizzes_created -= 1
             quiz.creator.save()
 
@@ -342,9 +342,18 @@ def profile(request):
             if form.is_valid():
                 user = UserProfile.objects.get(user = request.user)
 
+                DEFAULT_PROFILE_PICTURES = [
+                    "profile_pictures/default_profile.jpg",
+                    "profile_pictures/profile_1.png",
+                    "profile_pictures/profile_2.png",
+                    "profile_pictures/profile_3.png",
+                    "profile_pictures/profile_4.png"
+                    "profile_pictures/profile_5.png"
+                ]
+
                 # Deleting a user's old profile picture from the media folder,
-                # unless it's the default profile picture
-                if user.profile_picture != 'profile_pictures/default_profile.jpg':
+                # unless it's in the DEFAULT_PROFILE_PICTURES list
+                if user.profile_picture not in DEFAULT_PROFILE_PICTURES:
                     old_profile_picture = user.profile_picture
 
                     #path = os.path.join(settings.MEDIA_ROOT, old_profile_picture.name)
