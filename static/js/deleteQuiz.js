@@ -1,6 +1,5 @@
 
-const deleteButton = document.getElementById("Delete");
-const quizDiv = document.getElementById("quizzes");
+const deleteButton = document.getElementById("delete_button");
 
 function deleteQuiz() {
     var xhttp = new XMLHttpRequest();
@@ -23,8 +22,8 @@ function deleteQuiz() {
         alert("Please select a Quiz before deleting.")
     }
     else if (confirm("Are you sure you want to delete this Quiz?")) {
-        
-        const data = JSON.stringify({selected : selected});
+        // Sends selected quiz to profile view so that it can be deleted
+        const data = JSON.stringify({selected : selected, button : "delete"});
         xhttp.send(data);
 
         xhttp.onreadystatechange = function () {

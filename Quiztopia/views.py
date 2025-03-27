@@ -315,21 +315,22 @@ def compute_results(context_dict):
 @login_required
 def profile(request):
     if request.method == "POST":
-        action = request.POST.get("add_edit_quiz")
-        if action and action == "Add Quiz":
+        if request.POST.get("add_quiz"):
             return redirect(reverse("Quiztopia:add_quiz"))
-        elif action and action == "Edit Quiz":
-            # Edit this when edit_quiz is added -> Whoever is working on edit_quiz ! !
-            return HttpResponse("In Progress.")
+        
+        elif request.POST.get("edit_quiz"):
+            quiz_id = request.POST.get("edit_quiz")
+            return redirect(reverse("Quiztopia:edit_quiz",
+                                     kwargs={"quiz_id" : quiz_id}))
         
         # Request to delete a quiz
         if request.content_type == "application/json":
             data = json.loads(request.body)
             quiz_id = data["selected"]
-
             quiz = Quiz.objects.get(quiz_ID = quiz_id)
-            quiz.delete()
 
+            quiz.delete()
+            
             quiz.creator.quizzes_created -= 1
             quiz.creator.save()
 

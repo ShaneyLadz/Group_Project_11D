@@ -124,7 +124,7 @@ class QuizDeletionTests(TestCase):
         response = self.client.post(reverse("Quiztopia:profile"), {"selected" : self.quiz.quiz_ID}, content_type="application/json")
 
         self.assertEqual(Quiz.objects.count(), 0)
-        print("test_profile_delete_quiz PASSED")
+        print("test_delete_quiz PASSED")
 
 
     def test_delete_quiz_decrements_user_created_quizzes(self):

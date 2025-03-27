@@ -69,11 +69,13 @@
         </div>
 
         <div class="text-center mt-4">
-            <button id="Delete" class="btn btn-danger">Delete Selected Quiz</button>
+            <button id="delete_button" class="btn btn-danger">Delete Selected Quiz</button>
+            <button id="edit_button" class="btn btn-warning">Edit Quiz</button>
+
             <form id="add_edit_form" method="post" action="{% url 'Quiztopia:profile' %}" class="d-inline">
                 {% csrf_token %}
-                <input type="submit" name="add_edit_quiz" value="Edit Quiz" class="btn btn-warning">
-                <input type="submit" name="add_edit_quiz" value="Add Quiz" class="btn btn-success">
+                <input type="hidden" name="edit_quiz" value="" id="edit_prompt" />
+                <input type="submit" name="add_quiz" value="Add Quiz" class="btn btn-success" />
             </form>
         </div>
     </div>
@@ -81,5 +83,9 @@
 
 <script src="{% static 'js/changeProfile.js' %}"></script>
 <script src="{% static 'js/deleteQuiz.js' %}"></script>
-<script>const url = "{% url 'Quiztopia:profile' %}";</script>
+<script src="{% static 'js/editQuiz.js' %}"></script>
+<script>
+    const url = "{% url 'Quiztopia:profile' %}";
+    const quizDiv = document.getElementById("quizzes");
+</script>
 {% endblock %}
