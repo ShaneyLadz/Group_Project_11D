@@ -286,6 +286,9 @@ def profile(request):
             quiz = Quiz.objects.get(quiz_ID = quiz_id)
             quiz.delete()
 
+            quiz.creator.quizzes_created -= 1
+            quiz.creator.save()
+
             return JsonResponse({})
 
         # Request to change profile picture
