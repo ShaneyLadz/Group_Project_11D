@@ -49,14 +49,16 @@ def reset_database():
 
 # Create a superuser admin
 def create_superuser():
-    print("Creating a superuser admin...")
+    print("Creating a superuser admin profile...")
     try:
-        from django.contrib.auth.models import User
-        if not User.objects.filter(username="admin").exists():
-            User.objects.create_superuser("admin", "admin@example.com", "admin123")
-            print("Superuser 'admin' created with password 'admin123'.")
+        if not User.objects.filter(username="Grand Maester").exists():
+            User.objects.create_superuser("Grand Maester", "admin@example.com", "admin123")
+            print("Superuser 'Grand Maester' created with password 'admin123'.")
         else:
-            print("Superuser 'admin' already exists.")
+            print("Superuser 'Grand Maester' already exists.")
+        add_user(name="Grand Maester",
+                 image='profile_pictures/admin_profile.png',
+                 points=300,)
     except Exception as e:
         print(f"Error creating superuser: {e}")
 
@@ -70,7 +72,7 @@ def populate():
         {'username': 'Shane', 'points': 200, 'quizzes_taken': 15, 'image': 'profile_pictures/profile_2.png'},
         {'username': 'Jack', 'points': 100, 'quizzes_taken': 8, 'image': 'profile_pictures/profile_3.png'},
         {'username': 'Uuri', 'points': 250, 'quizzes_taken': 20, 'image': 'profile_pictures/profile_4.png'},
-        {'username': 'Shay', 'points': 180, 'quizzes_taken': 12, 'image': 'profile_pictures/profile_5.png'}
+        {'username': 'Shay', 'points': 180, 'quizzes_taken': 12, 'image': 'profile_pictures/profile_5.png'},
     ]
 
     for user_data in example_users:
@@ -78,7 +80,7 @@ def populate():
             name=user_data['username'],
             points=user_data['points'],
             quizzes_taken=user_data['quizzes_taken'],
-            image=user_data['image']
+            image=user_data['image'],
         )
         u = User.objects.get(username=user_data['username'])
         u.set_password(f"{user_data['username']}123")

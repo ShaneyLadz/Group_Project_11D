@@ -1,4 +1,3 @@
-
 const editButton = document.getElementById("edit_button");
 // editPrompt is a hidden button that receives the quiz_id from the javascript
 // when editButton is clicked, and redirects the user to the Edit Page
@@ -26,3 +25,30 @@ function editQuiz() {
     }
     
 editButton.addEventListener("click", editQuiz)
+
+const questions = document.getElementById("questions");
+var numberOfQuestions = questions.children.length;
+
+document.getElementById('quiz_form').addEventListener('submit', function(event) {
+    let valid = true;
+    var counter = 1;
+
+    const questionDivs = Array.from(questions.children);
+    questionDivs.forEach((questionDiv) => {
+        const correctAnswer = questionDiv.querySelector('input[type="radio"]:checked');
+
+        if (correctAnswer) {
+            const correctAnswerInput = correctAnswer.closest('.answer').querySelector('input[type="text"]');
+            
+            if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
+                alert(`Cannot select a blank answer as correct for question ${counter}. Please select a non-blank answer as correct.`);
+                valid = false;
+            }
+        } 
+        counter++;
+    });
+
+    if (!valid) {
+        event.preventDefault(); 
+    }
+});
