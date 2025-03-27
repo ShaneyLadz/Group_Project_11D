@@ -362,8 +362,9 @@ def profile(request):
                 user.profile_picture = request.FILES["profile_picture"]
                 user.save()
                 
-                return JsonResponse({"url" : user.profile_picture.url,})
-
+                return JsonResponse({"url" : user.profile_picture.url, "error" : False})
+            else:
+                return JsonResponse({"error" : True})
     else:
         user = UserProfile.objects.get(user = request.user)
         quizzes = Quiz.objects.filter(creator = user.username)
