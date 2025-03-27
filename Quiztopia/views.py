@@ -368,4 +368,4 @@ def profile(request):
         user = UserProfile.objects.get(user = request.user)
         quizzes = Quiz.objects.filter(creator = user.username)
         
-        return render(request, 'Quiztopia/profile.html', {"user" : user, "quizzes" : quizzes})
+        return render(request, 'Quiztopia/profile.html', {"userProfile" : user, "quizzes" : quizzes})
