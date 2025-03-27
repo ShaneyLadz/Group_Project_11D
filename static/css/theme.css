@@ -1,0 +1,51 @@
+body {
+    background: linear-gradient(135deg, #0057B7, #009FFF, #6ABEFF);
+    min-height: 100vh;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar {
+    background: linear-gradient(to right, #003D73, #0057B7, #009FFF);
+}
+
+.navbar-brand img {
+    height: 40px;
+}
+
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #FFD700 !important;
+    transform: scale(1.1);
+}
+
+.dropdown-menu {
+    background: #0057B7;
+    border: none;
+}
+
+.dropdown-item {
+    color: #ffffff;
+}
+
+.dropdown-item:hover {
+    background: #0073E6;
+    color: #FFD700;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 15px;
+    color: #003D73;
+}
+
+footer {
+    background: linear-gradient(to right, #003D73, #0057B7);
+    margin-top: auto;
+}

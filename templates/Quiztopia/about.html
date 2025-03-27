@@ -1,0 +1,46 @@
+{% extends 'Quiztopia/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    <title>Quiztopia | About Us</title>
+{% endblock %}
+
+{% block body_block %}
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h1 class="text-center mb-3">About Quiztopia</h1>
+
+        <section class="mb-4">
+            <h2 class="fw-bold">Our Mission</h2>
+            <p class="text-muted">
+                At Quiztopia, our mission is to create a vibrant and engaging platform where knowledge meets fun. 
+                We believe that learning should be an enjoyable experience, and through our suite of interactive quizzes, 
+                we strive to make education accessible and entertaining for everyone.
+            </p>
+        </section>
+
+        <section class="mb-4">
+            <h2 class="fw-bold">What We Offer</h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">A wide array of quizzes across various topics to challenge your knowledge.</li>
+                <li class="list-group-item">The opportunity for users to create and customize their own quizzes.</li>
+                <li class="list-group-item">A friendly leaderboard showcasing the top quiz enthusiasts and creators.</li>
+                <li class="list-group-item">The option to rate quizzes to help improve and encourage fantastic content.</li>
+            </ul>
+        </section>
+
+        <section class="mb-4 text-center">
+            <h2 class="fw-bold">Join Us</h2>
+            <p class="text-muted">
+                We invite you to be a part of our community! Whether you're here to take quizzes, create your own, or compete with others, 
+                we hope you enjoy your experience at Quiztopia. Let's learn together!
+            </p>
+            <a href="{% url 'Quiztopia:register' %}" class="btn btn-primary">Join Quiztopia</a>
+        </section>
+
+        <footer class="text-center text-muted">
+            <p>Created by Team 11D</p>
+        </footer>
+    </div>
+</div>
+{% endblock %}

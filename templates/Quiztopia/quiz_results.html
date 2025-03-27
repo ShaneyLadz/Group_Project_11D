@@ -1,59 +1,62 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+    <title>Quiztopia | {{quiz.quiz_title }}</title>
+{% endblock %}
+
 {% block body_block %}
-    <h1>{{ quiz.quiz_title }}</h1>
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h1 class="text-center mb-3">{{ quiz.quiz_title }}</h1>
+        <h4 class="text-center text-muted">Created by {{ quiz.creator }}</h4>
+        <h5 class="text-center text-muted">{{ quiz.category }} - {{ quiz.difficulty }}</h5>
 
-    <div>
-        <h3>Created by {{ quiz.creator }} <br />
-        {{ quiz.category }} - {{ quiz.difficulty }}</h3>
-
-        <div id = "results">
-            <p><h2>You got {{ no_correct }} / {{ no_questions }} questions correct! <br />
-
+        <div class="alert alert-info text-center mt-4">
+            <h2>You got <strong>{{ no_correct }} / {{ no_questions }}</strong> correct!</h2>
             {% if not score == -1 %}
-                {{ score }} point(s) earned
+                <p class="lead">You earned <strong>{{ score }}</strong> point(s)!</p>
             {% endif %}
-            </p>
-
-            Rate this quiz:
-            <img src="{% static 'images/thumbs_up.png' %}" alt="Thumbs Up" id="upvote" />
-            <img src="{% static 'images/thumbs_down.png' %}" alt="Thumbs Down" id="downvote" />
-            </h2>
         </div>
 
-        <div id = "questions">
+        <div class="mt-4">
             {% for question, answers, selection in questions_answers_selections %}
-                <h3 id = "questionHeader">Question {{ forloop.counter }}</h3>
-                <h3 id = "questionText">{{ question.question_text }}</h3>
+            <div class="mb-4 p-3 border rounded shadow-sm">
+                <h3 class="fw-bold">{{ forloop.counter }}. {{ question.question_text }}</h3>
 
-                <h3 id = "answerHeader">Answers:</h3>
-                {% for answer in answers %}
-                    <div class = "answer">
-
-                        <input type="radio" name="{{ forloop.parentloop.counter }}" value="{{ forloop.counter }}"
-                        {% if forloop.counter == selection %} checked {% endif %} disabled />
-
-                        {% if answer.is_correct %}
-                            <b><span style="color:green;">{{ answer }}</span></b>
-                        {% elif not answer.is_correct and forloop.counter == selection %}
-                            <b><span style="color:red;">{{ answer }}</span></b>
-                        {% else %}
+                <div class="mt-2">
+                    {% for answer in answers %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" disabled
+                               {% if forloop.counter == selection %} checked {% endif %}>
+                        <label class="form-check-label {% if answer.is_correct %}text-success fw-bold{% elif forloop.counter == selection %}text-danger fw-bold{% endif %}">
                             {{ answer }}
-                        {% endif %}
+                        </label>
                     </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
             {% endfor %}
         </div>
 
-        <form id = "return_form" method="post" action="{% url 'Quiztopia:quiz_results' quiz.category_slug quiz.quiz_ID %}">
-            {% csrf_token %}
-            <input type="submit" name="submit" value="Return to Homepage" />
-        </form>
-    </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'Quiztopia:index' %}" class="btn btn-lg btn-success">Return to Homepage</a>
+        </div>
 
-    <script src="{% static 'js/upvote.js' %}"></script>
-    <script>
-        const url = "{% url 'Quiztopia:quiz_results' quiz.category_slug quiz.quiz_ID %}"
-    </script>
+        <div class="text-center mt-3">
+            <p class="lead">Rate this quiz:</p>
+            <button class="btn btn-outline-success mx-2" id="upvote">
+                👍 Thumbs Up
+            </button>
+            <button class="btn btn-outline-danger mx-2" id="downvote">
+                👎 Thumbs Down
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/upvote.js' %}"></script>
+<script>
+    const url = "{% url 'Quiztopia:quiz_results' quiz.category_slug quiz.quiz_ID %}";
+</script>
 {% endblock %}

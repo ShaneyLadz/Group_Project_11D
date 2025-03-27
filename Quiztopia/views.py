@@ -25,7 +25,7 @@ def category_view(request, category_slug):
     return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_slug})
 
 def about(request):
-    return render(request, 'Quiztopia/aboutUs.html')
+    return render(request, 'Quiztopia/about.html')
 
 def faq(request):
     return render(request, 'Quiztopia/faq.html')
