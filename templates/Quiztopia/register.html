@@ -10,10 +10,11 @@
     <div class="card shadow-sm p-4" style="max-width: 500px; width: 100%;">
         <h2 class="text-center mb-4">Register for Quiztopia</h2>
 
-        {% if user.is_authenticated %}
+        {% if registered %}
             <div class="alert alert-success text-center">
                 <strong>Thank you for registering!</strong><br>
-                <a href="{% url 'Quiztopia:index' %}" class="btn btn-primary mt-3">Return to Homepage</a>
+                <a href="{% url 'Quiztopia:login' %}" class="btn btn-primary mt-3">Go to Login page</a>
+                <a href="{% url 'Quiztopia:index' %}" class="btn btn-primary mt-3">Or return to Homepage</a>
             </div>
         {% else %}
             <form id="user_form" method="post" action="{% url 'Quiztopia:register' %}" enctype="multipart/form-data">
