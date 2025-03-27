@@ -231,8 +231,6 @@ def take_quiz(request, category_slug, quiz_id):
 
 def quiz_results(request, category_slug, quiz_id):
     if request.method == 'POST':
-        #del request.session["selected_answers"]
-
         # This code will run when the thumbs-up or thumbs-down is clicked
         # on the quiz results page.
         try:
