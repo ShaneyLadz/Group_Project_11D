@@ -1,41 +1,129 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+    <title>Quiztopia | FAQs</title>
+{% endblock %}
+
 {% block body_block %}
-    <h2>FAQ Page</h2>
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h1 class="text-center mb-3">Frequently Asked Questions</h1>
 
-    <ol>
-        <li><strong>What is Quiztopia?</strong>
-            <p>Quiztopia is an interactive quiz platform where users can test their knowledge, create their own quizzes,
-                 and compete with others on the leaderboard.</p>
-        </li>
-        <li><strong>Do I need to create an account to take quizzes?</strong>
-            <p>No, unregistered users can take quizzes without creating an account as well as rate them. 
-                However, registering provides additional features like quiz creation and the leaderboard.</p>
-        </li>
-        <li><strong>How can I register for an account?</strong>
-            <p>You can register by clicking on the 'Sign Up' button on the homepage and filling out the required fields. 
-                It only takes a few seconds!</p>
-        </li>
-        <li><strong>Can I create my own quizzes?</strong>
-            <p>Absolutely! Registered users can create and customize their own quizzes.</p>
-        </li>
-        <li><strong>How does the leaderboard work?</strong>
-            <p>The leaderboard tracks and displays the top users based on their quiz scores and participation. 
-                Compete with others to see who ranks at the top!</p>
-        </li>
-        <li><strong>Can I rate quizzes?</strong>
-            <p>Yes! After completing a quiz, registered users have the option to rate it, 
-                giving feedback to the creators and helping other users find great content.</p>
-        </li>
-        <li><strong>What should I do if I encounter a problem or have feedback?</strong>
-            <p>We welcome your feedback! 
-                You can reach out to us through our contact page or send an email to 3070943s@student.gla.ac.uk.</p>
-        </li>
-        <li><strong>Is there a mobile app available?</strong>
-            <p>Currently, we only have a web application. 
-                However, we are considering developing a mobile app in the future based on user demand.</p>
-        </li>
-    </ol>
+        <div class="accordion" id="faqAccordion">
+            <!-- Question 1 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        What is Quiztopia?
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Quiztopia is an interactive quiz platform where users can test their knowledge, create their own quizzes, and compete with others on the leaderboard.
+                    </div>
+                </div>
+            </div>
 
+            <!-- Question 2 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Do I need to create an account to take quizzes?
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        No, unregistered users can take quizzes and rate them. However, registering provides additional features like quiz creation and access to the leaderboard.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        How can I register for an account?
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        You can register by clicking on the 'Sign Up' button on the homepage and filling out the required fields. It only takes a few seconds!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Can I create my own quizzes?
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Absolutely! Registered users can create and customize their own quizzes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        How does the leaderboard work?
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        The leaderboard tracks and displays the top users based on their quiz scores and participation. Compete with others to see who ranks at the top!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        Can I rate quizzes?
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes! After completing a quiz, registered users have the option to rate it, giving feedback to the creators and helping other users find great content.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSeven">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                        What should I do if I encounter a problem or have feedback?
+                    </button>
+                </h2>
+                <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        We welcome your feedback! You can reach out to us through our contact page or send an email to <a href="mailto:3070943s@student.gla.ac.uk">3070943s@student.gla.ac.uk</a>.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingEight">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                        Is there a mobile app available?
+                    </button>
+                </h2>
+                <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Currently, we only have a web application. However, we are considering developing a mobile app in the future based on user demand.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 {% endblock %}

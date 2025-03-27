@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Quiztopia.forms import QuizForm, QuestionForm, AnswerForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm
+from Quiztopia.forms import QuizForm, AnswerFormSet, QuestionFormSet, UserForm, UserProfileForm, EditQuestionFormSet
 from Quiztopia.models import UserProfile, Question, Quiz, Answer
 import json
 import os
@@ -25,7 +25,7 @@ def category_view(request, category_slug):
     return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_slug})
 
 def about(request):
-    return render(request, 'Quiztopia/aboutUs.html')
+    return render(request, 'Quiztopia/about.html')
 
 def faq(request):
     return render(request, 'Quiztopia/faq.html')
@@ -93,7 +93,7 @@ def add_quiz(request):
 
     if request.method == 'POST':
         form = QuizForm(request.POST)
-        question_formset = QuestionFormSet(request.POST, prefix="questions")
+        question_formset = QuestionFormSet(request.POST, prefix="questions", queryset=Question.objects.none())
 
 
 
@@ -115,11 +115,13 @@ def add_quiz(request):
                       
 
 
-                        answer_formset = AnswerFormSet(request.POST, prefix=f'answers-{i}')
+                        answer_formset = AnswerFormSet(request.POST, instance=question, prefix=f'answers-{i}')
                         
                         if answer_formset.is_valid():
                             answers = answer_formset.save(commit=False)
                             correct_answer_index = request.POST.get(f'correct_answer_question_{i}')
+                            if correct_answer_index == "3" and len(answers) == 3:
+                                correct_answer_index = 2
                             for j, answer in enumerate(answers):
                                 if int(correct_answer_index) == j:
                                     answer.is_correct = True
@@ -132,12 +134,54 @@ def add_quiz(request):
         
     else:
         form = QuizForm()
-        question_formset = QuestionFormSet(prefix="questions")
+        question_formset = QuestionFormSet(prefix="questions", queryset=Question.objects.none())
         answer_formsets = [AnswerFormSet(prefix=f'answers-{i}') for i in range(10)]
         question_answer_pairs = zip(question_formset, answer_formsets)
 
     return render(request, 'Quiztopia/add_quiz.html', {'form' : form, 'questions' : question_formset, 'questions_and_answers' : question_answer_pairs})
 
+
+@login_required
+def edit_quiz(request, quiz_id):
+    quiz = get_object_or_404(Quiz, quiz_ID=quiz_id)  
+    questions = Question.objects.filter(quiz_ID=quiz_id)  
+    
+    if request.method == 'POST':
+        quiz_form = QuizForm(request.POST, instance=quiz)
+        question_formset = EditQuestionFormSet(request.POST, prefix="questions", queryset=questions)
+
+        if quiz_form.is_valid() and question_formset.is_valid():
+            quiz_form.save() 
+
+
+            for i, question_form in enumerate(question_formset):
+                question = question_form.save(commit=False)
+                question.quiz_ID = quiz 
+                question.save()
+
+                answer_formset = AnswerFormSet(request.POST, instance=question, prefix=f'answers-{i}')
+                if answer_formset.is_valid():
+                    number_of_answers = len(Answer.objects.filter(question_ID = question.question_ID))
+                    correct_answer_index = request.POST.get(f'correct_answer_question_{i}')
+                    for j in range(number_of_answers):
+                        answer = answer_formset[j].save(commit=False)
+                        if answer != "":
+                            if int(correct_answer_index) == j:
+                                answer.is_correct = True
+                            else:
+                                answer.is_correct = False
+                            answer.question_ID = question
+                            answer.save()
+
+            return redirect('/Quiztopia/') 
+
+    else:
+        quiz_form = QuizForm(instance=quiz)
+        question_formset = EditQuestionFormSet(prefix="questions", queryset=questions)
+        answer_formsets = [AnswerFormSet(instance=questions[i], prefix=f'answers-{i}') for i in range(len(questions))]
+        question_answer_pairs = zip(question_formset, answer_formsets)
+
+    return render(request, 'Quiztopia/edit_quiz.html', {'form': quiz_form, 'questions' : question_formset, 'questions_and_answers': question_answer_pairs, "quiz_id" : quiz_id})
 
 def take_quiz(request, category_slug, quiz_id):
     

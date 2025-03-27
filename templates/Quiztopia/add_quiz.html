@@ -1,110 +1,62 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+    <title>Quiztopia | Create a Quiz</title>
+{% endblock %}
+
 {% block body_block %}
-    <h1>Add a Quiz</h1>
-    <div>
+<div class="container mt-4">
+    <div class="card shadow-sm p-4">
+        <h1 class="text-center mb-3">Create a Quiz</h1>
+
         <form id="quiz_form" method="post" action="{% url 'Quiztopia:add_quiz' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            {{ questions.management_form }}
+            <div class="mb-3">
+                {{ form.as_p }}
+            </div>
+
             <div id="questions">
+                {{ questions.management_form }}
                 {% for question, answers in questions_and_answers %}
-                    <div id="question-{{forloop.counter }}">
-                        <h3 id="questionHeader">Question {{ forloop.counter }}</h3>
-                        {{ question.as_p }}
-                        <input type="text" name="questions-{{ forloop.counter0 }}-question_text" maxlength="500" pattern=".*\S.*" title="Question must contain atleast one character" placeholder="Enter question text" required>
-                        <h3>Answers:</h3>
+                    <div class="question-card card p-3 mb-3 shadow-sm">
+                        <h3 class="fw-bold">Question {{ forloop.counter }}</h3>
+                        <div class="mb-2">
+                            {{ question.as_p }}
+                            <input type="text" class="form-control" name="questions-{{ forloop.counter0 }}-question_text"
+                                   maxlength="500" pattern=".*\S.*" title="Question must contain at least one character"
+                                   placeholder="Enter question text" required>
+                        </div>
+
+                        <h5>Answers:</h5>
                         {{ answers.management_form }}
                         {% for answer in answers %}
-                            <div class ="answer">
-                                <input type="text", name="answers-{{ forloop.parentloop.counter0}}-{{ forloop.counter0}}-answer_text" maxlength="200"  pattern=".*\S.*" title="Answer must contain atleast one character" placeholder="Enter answer text" {% if forloop.counter0 < 2 %}required{% endif %}>
-                                <input type="radio" name="correct_answer_question_{{ forloop.parentloop.counter0 }}" value="{{ forloop.counter0 }}" required> Correct?
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="answers-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}-answer_text"
+                                       maxlength="200" pattern=".*\S.*" title="Answer must contain at least one character"
+                                       placeholder="Enter answer text" {% if forloop.counter0 < 2 %}required{% endif %}>
+                                <div class="input-group-text">
+                                    <input type="radio" name="correct_answer_question_{{ forloop.parentloop.counter0 }}"
+                                           value="{{ forloop.counter0 }}" required>
+                                    <label class="ms-2">Correct?</label>
+                                </div>
                             </div>
-                    {% endfor %}
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                {% endfor %}
             </div>
-            <button type="button" id="addQuestion">Add Question</button>
-            <button type="button" id="deleteQuestion">Delete Question</button>
-            <input type="submit" name="submit" value="Create Quiz" />
+
+            <div class="text-center mt-3">
+                <button type="button" id="addQuestion" class="btn btn-outline-primary">➕ Add Question</button>
+                <button type="button" id="deleteQuestion" class="btn btn-outline-danger">❌ Remove Question</button>
+            </div>
+
+            <div class="text-center mt-4">
+                <input type="submit" class="btn btn-lg btn-success" name="submit" value="Create Quiz">
+            </div>
         </form>
     </div>
+</div>
 
-<script>
-
-    const questions = document.getElementById("questions")
-    const addQuestion = document.getElementById("addQuestion");
-    const deleteQuestion = document.getElementById("deleteQuestion")
-    var numberOfQuestions = questions.children.length;
-
-    function addRemoveButton(){
-        deleteQuestion.addEventListener("click", function(){
-            if(numberOfQuestions > 1){
-                const form = questions.children[numberOfQuestions-1]
-                
-                if (form && form.style.display!="none") {
-                    form.style.display="none";
-                    const elements = form.querySelectorAll('input, select, button, textarea');
-                    elements.forEach((element) => {
-                        element.disabled = true;
-                    });
-                numberOfQuestions--;
-                updateTotalForms();
-            }
-        }
-        
-    });
-}
-
-
-    addQuestion.addEventListener("click", function(){
-        if(numberOfQuestions < 10){
-        
-            const form = questions.children[numberOfQuestions]
-    
-            if (form && form.style.display=="none") {
-                numberOfQuestions++;
-                form.style.display="block"
-                const elements = form.querySelectorAll('input, select, button, textarea');
-                elements.forEach((element) => {
-                    element.disabled = false;
-                });
-            }
-            updateTotalForms();
-        }
-    })
-
-
-    function updateTotalForms() {
-        const totalFormsField = document.querySelector('#id_questions-TOTAL_FORMS');
-        totalFormsField.value = numberOfQuestions;
-    }
-
-    document.getElementById('quiz_form').addEventListener('submit', function(event) {
-        let valid = true;
-        var counter = 1
-
-        const questionDivs = Array.from(questions.children)
-        questionDivs.forEach((questionDiv) => {
-            const correctAnswer = questionDiv.querySelector('input[type="radio"]:checked');
-
-            if (correctAnswer) {
-                const correctAnswerInput = correctAnswer.closest('.answer').querySelector('input[type="text"]');
-                
-                if (!correctAnswerInput || !correctAnswerInput.value.trim()) {
-                    alert(`Cannot select a blank answer as correct for question ${counter}. Please select a non blank answer as correct`);
-                    valid = false;
-                }
-            } 
-            counter++
-        });
-
-        if (!valid) {
-            event.preventDefault(); 
-        }
-    });
-
-    addRemoveButton()
-</script>
+<script src="{% static 'js/addQuiz.js' %}"></script>
 {% endblock %}

@@ -2,24 +2,52 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Register
+    <title>Quiztopia | Registration</title>
 {% endblock %}
 
 {% block body_block %}
-    <h1>Register for Quiztopia</h1>
-    {% if registered %}
-        Quiztopia says: <strong>thank you for registering!</strong>
-        <a href="{% url 'Quiztopia:index' %}">Return to the homepage.</a><br />
-    {% else %}
-        Quiztopia says: <strong>register here!</strong><br />
-        <form id="user_form" method="post" action="{% url 'Quiztopia:register' %}" enctype="multipart/form-data">
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="card shadow-sm p-4" style="max-width: 500px; width: 100%;">
+        <h2 class="text-center mb-4">Register for Quiztopia</h2>
 
-            {% csrf_token %}
+        {% if user.is_authenticated %}
+            <div class="alert alert-success text-center">
+                <strong>Thank you for registering!</strong><br>
+                <a href="{% url 'Quiztopia:index' %}" class="btn btn-primary mt-3">Return to Homepage</a>
+            </div>
+        {% else %}
+            <form id="user_form" method="post" action="{% url 'Quiztopia:register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
 
-            {{ user_form.as_p }}
-            {{ profile_form.as_p }}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Username</label>
+                    {{ user_form.username }}
+                </div>
 
-            <input type="submit" name="submit" value="Register" />
-        </form>
-    {% endif %}
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ user_form.email }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_password1" class="form-label">Password</label>
+                    {{ user_form.password }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_profile_picture" class="form-label">Profile Picture</label>
+                    {{ profile_form.profile_picture }}
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success w-100">Register</button>
+                </div>
+            </form>
+
+            <div class="text-center mt-3">
+                <p class="mb-0">Already have an account? <a href="{% url 'Quiztopia:login' %}" class="text-decoration-none">Login here</a></p>
+            </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

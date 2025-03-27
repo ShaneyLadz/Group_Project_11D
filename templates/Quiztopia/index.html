@@ -1,32 +1,76 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
-{% block body_block %}
-    <h1>Welcome to Quiztopia!</h1>
-    <a href="{% url 'Quiztopia:categories' %}"><h2>Categories</h2></a>
-
-
-    <table>
-        <tr>
-            <th>Position</th>
-            <th>User</th>
-            <th>Points</th>
-            <th>Quizzes Taken</th>
-        </tr>
-        {% for user in top_users %}
-            <tr>
-                <td>#{{ forloop.counter }}</td>
-                <td>
-                    {% if user.profile_picture %}
-                        <img src="{{ user.profile_picture.url }}" alt="Profile" width="35" height="35" />
-                    {% endif %}
-                    {{ user.username }}
-                </td>
-                <td>{{ user.points }}</td>
-                <td>{{ user.quizzes_taken }}</td>
-            </tr>
-            
-        {% endfor %}
-    </table>
+{% block title_block %}
+    <title>Quiztopia | Home</title>
 {% endblock %}
 
+{% block body_block %}
+<div class="container text-center mt-4">
+    <h1 class="mb-4">Welcome to Quiztopia!</h1>
+    <a href="{% url 'Quiztopia:categories' %}" class="btn btn-primary btn-lg mb-3">Explore Categories</a>
+    
+    <h2 class="mb-3">Leaderboard</h2>
+    
+    {% if top_users|length >= 3 %}
+    <div class="row justify-content-center align-items-end mb-5">
+        <div class="col-md-3 d-flex flex-column align-items-center">
+            <div class="bg-secondary text-white p-4 rounded shadow" style="width: 200px; height: 280px;">
+                <img src="{% if top_users.1.profile_picture %}{{ top_users.1.profile_picture.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" class="rounded-circle mb-2" width="90" height="90">
+                <h3>2nd</h3>
+                <h4>{{ top_users.1.username }}</h4>
+                <p>Score: {{ top_users.1.points }}</p>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <div class="bg-primary text-white p-4 rounded shadow-lg" style="width: 250px; height: 320px;">
+                <img src="{% if top_users.0.profile_picture %}{{ top_users.0.profile_picture.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" class="rounded-circle mb-2" width="110" height="110">
+                <h2>1st</h2>
+                <h3>{{ top_users.0.username }}</h3>
+                <p>Score: {{ top_users.0.points }}</p>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex flex-column align-items-center">
+            <div class="bg-secondary text-white p-4 rounded shadow" style="width: 180px; height: 260px;">
+                <img src="{% if top_users.2.profile_picture %}{{ top_users.2.profile_picture.url }}{% else %}{% static 'images/default_avatar.png' %}{% endif %}" class="rounded-circle mb-2" width="80" height="80">
+                <h3>3rd</h3>
+                <h4>{{ top_users.2.username }}</h4>
+                <p>Score: {{ top_users.2.points }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Position</th>
+                    <th>User</th>
+                    <th>Points</th>
+                    <th>Quizzes Taken</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in top_users|slice:"3:" %}
+                <tr>
+                    <td>#{{ forloop.counter|add:3 }}</td>
+                    <td class="d-flex align-items-center">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture.url }}" alt="Profile" class="rounded-circle me-2" width="35" height="35">
+                        {% endif %}
+                        {{ user.username }}
+                    </td>
+                    <td>{{ user.points }}</td>
+                    <td>{{ user.quizzes_taken }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No leaderboard data available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

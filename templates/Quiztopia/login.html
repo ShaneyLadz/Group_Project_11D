@@ -1,14 +1,43 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
+{% block title_block %}
+    <title>Quiztopia | Login</title>
+{% endblock %}
+
 {% block body_block %}
-    <h1>Login to Quiztopia</h1>
-    <form id="login_form" method="post" action="{% url 'Quiztopia:login' %}">
-        {% csrf_token %}
-        Username: <input type="text" name="username" value="" size="50" />
-        <br />
-        Password: <input type="password" name="password" value="" size="50" />
-        <br />
-        <input type="submit" value="submit" />
-    </form>
+<div class="container d-flex justify-content-center align-items-center min-vh-50">
+    <div class="card shadow-sm p-4" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">Login to Quiztopia</h2>
+
+        {% if user.is_authenticated %}
+            <div class="alert alert-success text-center">
+                <strong>You're already logged in!</strong><br>
+                <a href="{% url 'Quiztopia:index' %}" class="btn btn-primary mt-3">Return to Homepage</a>
+            </div>
+        {% else %}
+        <form id="login_form" method="post" action="{% url 'Quiztopia:login' %}">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="Enter your username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <p class="mb-0">Don't have an account? <a href="{% url 'Quiztopia:register' %}" class="text-decoration-none">Register here</a></p>
+        </div>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}

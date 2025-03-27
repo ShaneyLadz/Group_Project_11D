@@ -65,12 +65,23 @@ def create_superuser():
 def populate():
     # CREATING THE USERS
     print('Creating users...')
-    example_users = ['Tshimollo', 'Shane', 'Jack', 'Uuri', 'Shay']
+    example_users = [
+        {'username': 'Tshimollo', 'points': 150, 'quizzes_taken': 10, 'image': 'profile_pictures/profile_1.png'},
+        {'username': 'Shane', 'points': 200, 'quizzes_taken': 15, 'image': 'profile_pictures/profile_2.png'},
+        {'username': 'Jack', 'points': 100, 'quizzes_taken': 8, 'image': 'profile_pictures/profile_3.png'},
+        {'username': 'Uuri', 'points': 250, 'quizzes_taken': 20, 'image': 'profile_pictures/profile_4.png'},
+        {'username': 'Shay', 'points': 180, 'quizzes_taken': 12, 'image': 'profile_pictures/profile_5.png'}
+    ]
 
-    for user in example_users:
-        add_user(user)
-        u = User.objects.get(username=user)
-        u.set_password(f'{user}123')
+    for user_data in example_users:
+        add_user(
+            name=user_data['username'],
+            points=user_data['points'],
+            quizzes_taken=user_data['quizzes_taken'],
+            image=user_data['image']
+        )
+        u = User.objects.get(username=user_data['username'])
+        u.set_password(f"{user_data['username']}123")
         u.save()
 
     # Print the users we have added
@@ -119,7 +130,7 @@ def populate():
         category = category_options[category_index]
         difficulty = difficulty_options[difficulty_index]
         upvotes = 0
-        creator = UserProfile.objects.get(username=example_users[i % len(example_users)])
+        creator = UserProfile.objects.get(username=example_users[i % len(example_users)]['username'])
 
         # Create or get the quiz
         quiz = add_quiz(quiz_title, category, difficulty, upvotes, creator)

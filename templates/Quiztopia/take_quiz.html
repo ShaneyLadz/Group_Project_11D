@@ -1,33 +1,42 @@
 {% extends 'Quiztopia/base.html' %}
 {% load staticfiles %}
 
-{% block body_block %}
-    <h1>{{ quiz.quiz_title }}</h1>
+{% block title_block %}
+    <title>Quiztopia | {{ quiz.quiz_title }}</title>
+{% endblock %}
 
-    <div>
-        <form id = "answer_form" method="post" action ="{% url 'Quiztopia:take_quiz' quiz.category_slug quiz.quiz_ID %}">
+{% block body_block %}
+<div class="container mt-4">
+    <form id="answer_form" method="post" action="{% url 'Quiztopia:take_quiz' quiz.category_slug quiz.quiz_ID %}">
         {% csrf_token %}
 
-            <h3>Created by {{ quiz.creator }} <br />
-            {{ quiz.category }} - {{ quiz.difficulty }}</h3>
+    <div class="card shadow-sm p-4">
+        <h1 class="text-center mb-3">{{ quiz.quiz_title }}</h1>
+        <h4 class="text-center text-muted">Created by {{ quiz.creator }}</h4>
+        <h5 class="text-center text-muted">{{ quiz.category }} - {{ quiz.difficulty }}</h5>
 
-            <div id = "questions">
+            <div id="questions mt-4">
                 {% for question, answers in questions_answers %}
-                    <h3 id = "questionHeader">Question {{ forloop.counter }}</h3>
-                        <h3 id = "questionText">{{ question.question_text }}</h3>
+                <div class="mb-4 p-3 border rounded shadow-sm">
+                    <h3 class="fw-bold">{{ forloop.counter }}. {{ question.question_text }}</h3>
 
-                        <h3 id = "answerHeader">Answers:</h3>
+                    <div class="mt-2">
+                        <h4 id = "answerHeader">Answers:</h4>
                         {% for answer in answers %}
                             <div class = "answer">
-
                                 <input type = "radio" name = "{{ forloop.parentloop.counter }}" value = "{{ forloop.counter }}" />
                                 {{ answer }}
-                                
                             </div>
                         {% endfor %}
+                    </div>
+                </div>
                 {% endfor %}
             </div>
-            <input type = "submit" name = "submit" value = "Complete Quiz" />
+
+            <div class="text-center">
+                <input type = "submit" name = "submit" value = "Complete Quiz" />
+            </div>
         </form>
     </div>
+</div>
 {% endblock %}
