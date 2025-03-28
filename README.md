@@ -1,7 +1,6 @@
 # Quiztopia by Team 11D
 
 ## Application Description
-
 Quiztopia is a dynamic and interactive web application designed to provide users with an engaging trivia experience. The platform allows users to explore a wide range of quizzes categorized by topics and difficulty levels. Users can create accounts, participate in quizzes, and track their progress over time. 
 
 ## Population Script:
