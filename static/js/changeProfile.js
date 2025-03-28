@@ -26,8 +26,8 @@ function uploadFile() {
     xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
         var response = JSON.parse(this.responseText);
-
-        if (response.url) {
+        
+        if (response.url && response.error == false) {
             image.src = response.url;
         }
     }
