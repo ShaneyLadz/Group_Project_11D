@@ -21,7 +21,7 @@ def categories_view(request):
     return render(request, 'Quiztopia/categories.html', {'categories' : CATEGORIES})
 
 def category_view(request, category_slug):
-    quizzes = Quiz.objects.filter(category_slug=category_slug)
+    quizzes = Quiz.objects.filter(category_slug=category_slug).order_by("-upvotes")
     return render(request, 'Quiztopia/category.html', {'quizzes': quizzes, 'category_name': category_slug})
 
 def about(request):

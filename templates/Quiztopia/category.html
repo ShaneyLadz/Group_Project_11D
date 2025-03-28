@@ -18,6 +18,7 @@
                     <h5 class="card-title">{{ quiz.quiz_title }}</h5>
                     <p class="card-text"><strong>Difficulty:</strong> {{ quiz.difficulty }}</p>
                     <p class="card-text"><strong>Created by:</strong> {{ quiz.creator }}</p>
+                    <p class="card-text"><strong>Upvotes:</strong> {{ quiz.upvotes }}</p>
                     <a href="{% url 'Quiztopia:take_quiz' quiz.category_slug quiz.quiz_ID %}" class="btn btn-primary mt-auto">Take Quiz</a>
                 </div>
             </div>
