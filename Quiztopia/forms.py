@@ -1,6 +1,6 @@
 from django import forms 
 from Quiztopia.models import Quiz, Question, Answer, User, UserProfile
-from django.forms import formset_factory, inlineformset_factory, modelformset_factory
+from django.forms import inlineformset_factory, modelformset_factory
 
 class QuizForm(forms.ModelForm):
 
@@ -45,7 +45,7 @@ class UserProfileForm(forms.ModelForm):
 
 class EditQuestionForm(forms.ModelForm):
 
-    question_text = forms.CharField(max_length=500,required=True)
+    question_text = forms.CharField(max_length=500,required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Question
@@ -57,4 +57,3 @@ class EditQuestionForm(forms.ModelForm):
 QuestionFormSet = modelformset_factory(Question, form=QuestionForm, extra=10,min_num=0,max_num=10)
 AnswerFormSet = inlineformset_factory(Question, Answer, form=AnswerForm, extra=4, max_num=4, can_delete=False)
 EditQuestionFormSet = modelformset_factory(Question, form=EditQuestionForm, extra=0,min_num=0,max_num=10)
-EditAnswerFormSet = inlineformset_factory(Question, Answer, form=AnswerForm, extra=4, max_num=4, can_delete=False)

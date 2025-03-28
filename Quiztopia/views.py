@@ -337,7 +337,8 @@ def profile(request):
         # Request to change profile picture
         elif request.content_type == "multipart/form-data":
             form = UserProfileForm(request.POST, request.FILES)
-            if form.is_valid():
+            
+            if form.is_valid() and request.FILES:
                 user = UserProfile.objects.get(user = request.user)
 
                 DEFAULT_PROFILE_PICTURES = [
